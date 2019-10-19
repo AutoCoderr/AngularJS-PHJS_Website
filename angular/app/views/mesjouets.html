@@ -1,0 +1,41 @@
+<div ng-controleur="MesJouetsCtrl">
+  <h1>Vos jouets</h1>
+  <ul>
+     <span ng-if="jouets.length == 0" style="color: red;">Vous n'avez aucun jouet</span>
+
+     <table>
+        <tr ng-repeat="jouet in jouets"><td>
+            <table class="list">
+                <tr><td style="font-size: 30px;">{{jouet.nomj}} ({{jouet.cat}}) : </td></tr>
+                <tr><td style="font-size: 20px;">à {{jouet.prenom}} {{jouet.nom}}</td></tr>
+                <tr><td><img width="400px" height="300px" src="http://54.38.184.22:9001/img/{{jouet.id}}.jpg" /></td></tr>
+                <tr><td>statut : '{{jouet.statut}}'</td></tr>
+                <tr><td style="height: 35px;"></td></tr>
+             </table>
+         </td><td>
+             <input type="button" value="Supprimer" ng-click="supprJouet(jouet.id)"/>
+        </td></tr>
+      </table>
+      <h2>Ajouter un jouet</h2>
+      <table>
+          <tr><td>Nom : </td><td><input type="text" ng-model="nomJ"/></td></tr>
+          <tr><td>Description : </td><td><input type="text" ng-model="descriptionJ"/></td></tr>
+          <tr><td>Status : </td><td>
+            <select ng-model="statutJ">
+                <option value="prive">Privé</option>
+                <option value="public">Publique</option>
+            </select>
+           </td></tr>
+          <tr><td>Catégorie</td><td>
+            <select ng-model="catJ">
+                <option ng-repeat="cat in cats" value="{{cat.id}}">{{cat.nom}}</option>
+            </select>
+          </td></tr>
+          <tr><td>Image : </td><td><input type="file" id="fileUpload"/></td></tr>
+      </table>
+      <input type="button" value="Ajouter" ng-click="addJouet()"/><br/>
+      <span style="color: green" ng-if="success == true">Upload Réussi!</span>
+      <ul>
+            <li style="color: red;" ng-repeat="error in errors">{{error}}</li>
+      </ul>
+</div>

@@ -1,0 +1,18 @@
+<?phjs
+
+let Controleur = require(PHJS.cd+"/../controleur.js");
+let controleur = new Controleur();
+
+controleur.listCat(function (error,results) {
+   if (error) {
+       PHJS.log("500", "ERROR", "get cats => "+PHJS.libs.util.format(error));
+       echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
+       --END--
+       return;
+   }
+
+   echo_json({rep: "success", cats: results});
+   --END--
+});
+
+?>

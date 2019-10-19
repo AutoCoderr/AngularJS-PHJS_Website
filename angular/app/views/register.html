@@ -1,0 +1,18 @@
+<div ng-controleur="RegisterCtrl">
+  <center>
+  <h1>Inscription</h1>
+  <br/>
+  <table>
+  <tr><td>Votre prénom : </td><td><input type="text" ng-model="prenom"/></td></tr>
+  <tr><td>Votre nom : </td><td><input type="text" ng-model="nom"/></td></tr>
+  <tr><td>Votre mot de passe : </td><td><input type="password" ng-model="passwd"/></td></tr>
+  <tr><td>Confirmer votre mot de passe : </td><td><input type="password" ng-model="passwdConfirm"/></td></tr>
+  <tr><td colspan="2" style="color: red; text-align: center;" ng-bind="verifConfirmPasswd()"></td></tr>
+  <tr><td colspan="2" style="text-align: center;"><input type="button" ng-click="sendRegister()" value="S'inscrire"></td></tr>
+  </table>
+  <span style="color: green" ng-if="success === true">inscription réussie !! </span>
+  <ul>
+      <li ng-repeat="error in errors" style="color: red;">{{error}}</li>
+   </ul>
+  </center>
+</div>

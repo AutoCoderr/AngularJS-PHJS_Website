@@ -1,0 +1,20 @@
+<?phjs
+let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
+if (token === "") {
+    echo_json({rep: "error", errors: ["token non spécifié"]});
+    --END--
+    return;
+}
+
+token = parseInt(token);
+
+if (typeof(PHJS.global.connecteds) === "undefined") {
+    PHJS.global.connecteds = {};
+}
+
+echo_json({rep: "success",
+    connected: (typeof(PHJS.global.connecteds[token]) === "undefined" ? false : true)
+});
+--END--
+
+?>

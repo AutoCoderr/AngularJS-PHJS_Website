@@ -1,0 +1,20 @@
+<div ng-controleur="ConnectCtrl">
+  <center>
+    <section ng-if="Page.connected() == false">
+        <h1>----- Connection -----</h1>
+        Votre prénom: <input type="text" ng-model="$parent.prenom"/><br/>
+        Votre nom: <input type="text" ng-model="$parent.nom"/><br/>
+        Votre mot de passe: <input type="password" ng-model="$parent.passwd"/><br/>
+        <input type="button" value="Valider" ng-click="sendConnect()"/>
+        <span style="color: green" ng-if="success === true">Connexion réussie !! </span>
+    </section>
+    <section ng-if="Page.connected() == true">
+      <h1>----- Connection -----</h1>
+      <input type="button" ng-click="sendDisconnect()" value="Se deconnecter"/>
+      <span style="color: green" ng-if="success === true">Deconnexion réussie !! </span>
+    </section>
+    <ul>
+      <li ng-repeat="error in errors" style="color: red;">{{error}}</li>
+    </ul>
+  </center>
+</div>

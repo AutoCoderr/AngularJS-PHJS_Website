@@ -1,0 +1,71 @@
+<?phjs
+
+let errors = [];
+
+let nom = typeof(PHJS.args.POST.nom) === "undefined" ? "" : PHJS.args.POST.nom.content;
+if (nom === "") {
+    errors.push("Nom du jouet non spécifié");
+}
+
+let description = typeof(PHJS.args.POST.description) === "undefined" ? "" : PHJS.args.POST.description.content;
+if (description === "") {
+    errors.push("Description du jouet non spécifiée");
+}
+
+let statut = typeof(PHJS.args.POST.statut) === "undefined" ? "" : PHJS.args.POST.statut.content;
+if (statut === "") {
+    errors.push("Status du jouet non spécifié");
+} else if (statut !== "public" && statut !== "prive") {
+    errors.push("Status spécifié incorrect");
+}
+
+let catId = typeof(PHJS.args.POST.catId) === "undefined" ? "" : PHJS.args.POST.catId.content;
+if (catId === "") {
+    errors.push("categorie non spécifié");
+}
+
+let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
+if (token === "") {
+    errors.push("Token non spécifié");
+}
+token = parseInt(token);
+if (typeof(PHJS.global.connecteds) === "undefined") {
+    PHJS.global.connecteds = {};
+}
+
+let userId;
+if (typeof(PHJS.global.connecteds[token]) === "undefined") {
+    errors.push("Token incorrect");
+} else {
+    userId = PHJS.global.connecteds[token].id;
+}
+
+let imagePath = typeof(PHJS.args.POST.image) === "undefined" ? "" : (
+    PHJS.args.POST.image.type != "file" ? "" : (
+        PHJS.args.POST.image.content.type != "image/jpeg" ? "" : PHJS.args.POST.image.content.path
+    ));
+if (imagePath === "") {
+    errors.push("Image non spécifié ou incorrecte");
+}
+
+if (errors.length > 0) {
+    echo_json({rep: "error", errors: errors});
+    --END--
+    return;
+}
+
+let Controleur = require(PHJS.cd+"/../controleur.js");
+let controleur = new Controleur();
+
+controleur.addJouet(nom,description,statut,catId,imagePath,userId, function (error, result) {
+    if (error) {
+        PHJS.log("500", "ERROR", "add jouet => "+PHJS.libs.util.format(error));
+        echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
+        --END--
+        return;
+    }
+    echo_json({rep: "success"});
+    --END--
+});
+
+?>

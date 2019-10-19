@@ -1,0 +1,57 @@
+<?phjs
+
+let Controleur =  require(PHJS.cd+'/../controleur.js');
+
+let prenom, nom, passwd, errors = [];
+
+prenom = typeof(PHJS.args.POST.prenom) === "undefined" ? "" : PHJS.args.POST.prenom.content;
+if (prenom === "") {
+    errors.push("Prénom non spécifié");
+}
+
+nom = typeof(PHJS.args.POST.nom) === "undefined" ? "" : PHJS.args.POST.nom.content;
+if (nom === "") {
+    errors.push("Nom non spécifié");
+}
+
+passwd = typeof(PHJS.args.POST.passwd) === "undefined" ? "" : PHJS.args.POST.passwd.content;
+if (passwd === "") {
+    errors.push("Mot de passe non spécifié");
+}
+
+if (errors.length > 0) {
+    echo_json({rep: "error", errors: errors});
+    --END--
+    return;
+}
+
+let controleur = new Controleur();
+
+controleur.register(prenom, nom, passwd, function (error, result) {
+    if (error) {
+        PHJS.log("500", "ERROR", "connect => "+PHJS.libs.util.format(error));
+        echo_json({rep: "error", errors: ["Erreur de connexion à la base de données"]});
+        --END--
+        return;
+    }
+    if (typeof(result) == "string") {
+        echo_json({rep: "error", errors: [result]});
+        --END--
+        return;
+    }
+
+    if (typeof(PHJS.global.connecteds) === "undefined") {
+        PHJS.global.connecteds = {};
+    }
+    let token = Math.round(Math.random()*(10**6));
+    while (typeof(PHJS.global.connecteds[token]) !== "undefined") {
+        token = Math.round(Math.random()*(10**6));
+    }
+
+    PHJS.global.connecteds[token] = {id: result.id, prenom: prenom, nom: nom, token: token}
+
+    echo_json({rep: "success", user: PHJS.global.connecteds[token]});
+    --END--
+})
+
+?>

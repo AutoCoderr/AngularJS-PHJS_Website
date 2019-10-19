@@ -1,0 +1,3 @@
+forbidden: /node_modules;
+
+option(/): file *.js is forbidden; recursive NO
