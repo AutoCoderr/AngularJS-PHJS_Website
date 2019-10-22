@@ -240,8 +240,8 @@ module.exports = class Controleur {
 	}
 
 	acceptDemandeTroc(idUser,idTroc,callback) {
-		this.modele.select("IDCOMPTESRC as idUserSrc, IDJSRC as idJouetSrc, IDCOMPTEDST as idUserDst, IDJDST as idJouetDst","DEMANDETROC",
-							"IDTROC = "+idTroc+" and IDCOMPTEDST = "+idUser, (error,results) => {
+		this.modele.select("D.IDCOMPTESRC as idUserSrc, D.IDJSRC as idJouetSrc, D.IDCOMPTEDST as idUserDst, D.IDJDST as idJouetDst, CO.PRENOMCOMPTE as prenomDst, CO.NOMCOMPTE as nomDst",
+			"DEMANDETROC D, COMPTES CO", "D.IDTROC = "+idTroc+" and D.IDCOMPTEDST = CO.IDCOMPTE and D.IDCOMPTEDST = "+idUser, (error,results) => {
 				if (error) {
 					callback(error);
 					return;
@@ -268,10 +268,36 @@ module.exports = class Controleur {
 									callback(error);
 									return;
 								}
-								callback(null,true);
+								this.modele.insert("NOTIFICATIONS",[null, demande.prenomDst+" "+demande.nomDst+" a accepté(e) votre demande de troc", demande.idUserSrc], (error) => {
+									if (error) {
+										callback(error);
+										return;
+									}
+									callback(null,true);
+								});
 							});
 					});
 				});
 			});
+	}
+
+	listNotification(idUser,callback) {
+		this.modele.select("IDNOT as id, CONTENT as content","NOTIFICATIONS","IDCOMPTE = "+idUser, function (error,results) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null,results);
+		});
+	}
+
+	supprNotification(idUser,idNotif,callback) {
+		this.modele.delete("NOTIFICATIONS","IDNOT = "+idNotif+" and IDCOMPTE = "+idUser, function (error) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null);
+		});
 	}
 };

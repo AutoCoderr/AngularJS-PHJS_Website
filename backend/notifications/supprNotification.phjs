@@ -20,18 +20,25 @@ if (typeof(PHJS.global.connecteds[token]) === "undefined") {
 
 let idUser = PHJS.global.connecteds[token].id;
 
+let idNotif = typeof(PHJS.args.POST.idNotif) === "undefined" ? "" : PHJS.args.POST.idNotif.content;
+if (idNotif === "") {
+	echo_json({rep: "error", errors: ["Notification non spécifiée"]});
+	--END--
+	return;
+}
+
 let Controleur = require(PHJS.cd+"/../controleur.js");
 let controleur = new Controleur();
 
-controleur.listNotification(idUser,function (error,notifications) {
+controleur.supprNotification(idUser,idNotif,function (error) {
 	if (error) {
-		PHJS.log("500", "ERROR", "get list notifications => "+PHJS.libs.util.format(error));
+		PHJS.log("500", "ERROR", "suppr notification => "+PHJS.libs.util.format(error));
 		echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
 		--END--
 		return;
 	}
 
-	echo_json({rep: "success", notifications: notifications});
+	echo_json({rep: "success"});
 	--END--
 });
 ?>

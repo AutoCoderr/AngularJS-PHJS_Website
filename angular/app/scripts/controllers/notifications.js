@@ -19,6 +19,8 @@ angular.module('angularApp')
 
     $scope.demmandes = [];
     $scope.errorsDemand = [];
+    $scope.notifications = [];
+    $scope.errorsNotifications = [];
 
     $.post(
       'http://54.38.184.22:9001/demandes/getDemmandTroc.phjs',
@@ -33,6 +35,25 @@ angular.module('angularApp')
         } else {
           $scope.demandes = data.demandes;
           $scope.errorsDemand = [];
+          $scope.$apply();
+        }
+      },
+      'json'
+    );
+
+    $.post(
+      'http://54.38.184.22:9001/notifications/listNotifications.phjs',
+      {
+        token: $cookies.get("token")
+      },
+      function (data) {
+        if (data.rep === "error") {
+          $scope.errorsNotifications = data.errors;
+          $scope.notifications = [];
+          $scope.$apply();
+        } else {
+          $scope.errorsNotifications = [];
+          $scope.notifications = data.notifications;
           $scope.$apply();
         }
       },
@@ -73,6 +94,31 @@ angular.module('angularApp')
         {
           token: $cookies.get("token"),
           idTroc: id
+        },
+        function (data) {
+          if (data.rep === "error") {
+            let errorStr = "Errors : ";
+            for (let i=0;i<data.errors;i++) {
+              errorStr += "\n\t - "+data.errors[i];
+            }
+            alert(errorStr);
+          } else {
+            $window.location.reload();
+          }
+        },
+        'json'
+      );
+    };
+
+    $scope.supprNotification = function (id) {
+      if (!confirm("Êtes vous sûre de vouloir supprimer cette notification ?")) {
+        return;
+      }
+      $.post(
+        'http://54.38.184.22:9001/notifications/supprNotification.phjs',
+        {
+          token: $cookies.get("token"),
+          idNotif: id
         },
         function (data) {
           if (data.rep === "error") {
