@@ -18,7 +18,7 @@ angular.module('angularApp')
         },
 
         function(data){
-         if (data.rep == "error") {
+         if (data.rep === "error") {
            $scope.errors = data.errors;
            $scope.jouets = [];
            $scope.$apply();

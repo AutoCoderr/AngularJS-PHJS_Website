@@ -39,7 +39,6 @@ module.exports = class Modele {
 				datasStr += ", ";
 			}
 		}
-		console.log("datasStr => ("+datasStr+")");
 		this.conn.query("INSERT INTO "+table+" VALUE ("+datasStr+")", function (error, result) {
 			if (error) {
 				callback(error,result);
@@ -78,7 +77,6 @@ module.exports = class Modele {
 			setStr += ", ";
 		}
 		setStr = setStr.substring(0,setStr.length-2);
-		console.log(setStr);
 
 		this.conn.query("UPDATE "+table+" SET "+setStr+" WHERE "+conditions, function (error, result) {
 			if (error) {

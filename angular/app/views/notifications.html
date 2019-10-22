@@ -1,0 +1,16 @@
+<div ng-controleur="NotificationCtrl">
+  <center>
+    <h1>Notifications</h1>
+    <ul>
+      <li style="color: red;" ng-repeat="error in errorsDemand">{{error}}</li>
+    </ul>
+
+    <table>
+      <span style="color: orange;" ng-if="demandes.length == 0">Vous n'avez aucune notification</span>
+      <tr ng-repeat="demande in demandes">
+        <td><b>{{demande.prenomSrc}} {{demande.nomSrc}}</b> Souhaite échanger son <b>{{demande.jouetSrc}}</b> avec votre <b>{{demande.jouetDst}} : </b></td>
+        <td><input type="button" value="Accepter" ng-click="acceptDemande(demande.id)"/><input type="button" value="Refuser" ng-click="refusDemande(demande.id)"/></td>
+      </tr>
+    </table>
+  </center>
+</div>

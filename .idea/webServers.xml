@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ef5b2bd7-9858-4a60-a9cc-b42863e92cc8" name="VPS SFTP" url="http://54.38.184.22:9000">
+        <fileTransfer host="54.38.184.22" port="22" rootFolder="/home/julien/projects/angularTroc" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

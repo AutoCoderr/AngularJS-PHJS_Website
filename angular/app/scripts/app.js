@@ -39,6 +39,11 @@ angular
         controller: 'RegisterCtrl',
         controllerAs: 'register',
         })
+      .when('/notifications', {
+        templateUrl: 'views/notifications.html',
+        controller: 'NotificationCtrl',
+        controllerAs: 'notifications',
+      })
       .otherwise({
         redirectTo: '/'
       });

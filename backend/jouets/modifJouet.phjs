@@ -1,0 +1,73 @@
+<?phjs
+
+if (typeof(PHJS.global.connecteds) === "undefined") {
+    PHJS.global.connecteds = {};
+}
+
+let errors = [];
+
+let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
+if (token === "") {
+    errors.push("token non spécifié");
+} else {
+    token = parseInt(token);
+    if (typeof(PHJS.global.connecteds[token]) === "undefined") {
+        errors.push("Vous n'êtes pas connecté");
+    }
+}
+
+let idJouet = typeof(PHJS.args.POST.idJouet) === "undefined" ? "" : PHJS.args.POST.idJouet.content;
+if (idJouet === "") {
+    errors.push("id du jouet non spécifié");
+}
+
+let nom = typeof(PHJS.args.POST.nom) === "undefined" ? "" : PHJS.args.POST.nom.content;
+if (nom === "") {
+    errors.push("Nom non spécifié");
+}
+
+let description = typeof(PHJS.args.POST.description) === "undefined" ? "" : PHJS.args.POST.description.content;
+if (description === "") {
+    errors.push("Description non spécifiée");
+}
+
+let statut = typeof(PHJS.args.POST.statut) === "undefined" ? "" : PHJS.args.POST.statut.content;
+if (statut === "") {
+    errors.push("Statut non spécifié");
+} else if (statut !== "public" && statut !== "prive") {
+    errors.push("Statut spécifié invalide");
+}
+
+let catId = typeof(PHJS.args.POST.catId) === "undefined" ? "" : PHJS.args.POST.catId.content;
+if (catId === "") {
+    errors.push("Categorie non spécifiée");
+}
+
+if (errors.length > 0) {
+    echo_json({rep: "error", errors: errors});
+    --END--
+    return;
+}
+
+let idUser = PHJS.global.connecteds[token].id;
+
+let Controleur = require(PHJS.cd+"/../controleur.js");
+let controleur = new Controleur();
+
+controleur.modifJouet(idUser,idJouet,nom,description,statut,catId,function (error,result) {
+    if (error) {
+        PHJS.log("500", "ERROR", "modif jouet => "+PHJS.libs.util.format(error));
+        echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
+        --END--
+        return;
+    }
+    if (typeof(result) === "string") {
+        echo_json({rep: "error", errors: [result]});
+        --END--
+        return;
+    }
+    echo_json({rep: "success"});
+    --END--
+});
+
+?>

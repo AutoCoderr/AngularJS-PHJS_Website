@@ -1,7 +1,7 @@
 <div ng-controleur="MesJouetsCtrl">
   <h1>Vos jouets</h1>
   <ul>
-     <span ng-if="jouets.length == 0" style="color: red;">Vous n'avez aucun jouet</span>
+     <span ng-if="jouets.length == 0" style="color: orange;">Vous n'avez aucun jouet</span>
 
      <table>
         <tr ng-repeat="jouet in jouets"><td>
@@ -9,12 +9,40 @@
                 <tr><td style="font-size: 30px;">{{jouet.nomj}} ({{jouet.cat}}) : </td></tr>
                 <tr><td style="font-size: 20px;">à {{jouet.prenom}} {{jouet.nom}}</td></tr>
                 <tr><td><img width="400px" height="300px" src="http://54.38.184.22:9001/img/{{jouet.id}}.jpg" /></td></tr>
-                <tr><td>statut : '{{jouet.statut}}'</td></tr>
+                <tr><td>statut : '{{jouet.statut == 'prive' ? 'Privé' : 'Publique'}}'</td></tr>
                 <tr><td style="height: 35px;"></td></tr>
              </table>
          </td><td>
-             <input type="button" value="Supprimer" ng-click="supprJouet(jouet.id)"/>
-        </td></tr>
+             Changer nom : <input type="text" ng-model="nomsToChange[jouet.id]"><br/><br/>
+             Changer description : <input type="text" ng-model="descriptionsToChange[jouet.id]"><br/><br/>
+             Changer Categorie : <select ng-model="categoriesToChange[jouet.id]">
+                                       <option ng-repeat="cat in cats" value="{{cat.id}}">{{cat.nom}}</option>
+                                 </select><br/><br/>
+             Changer statut : <select ng-model="statutsToChange[jouet.id]">
+                                   <option value="prive">Privé</option>
+                                   <option value="public">Publique</option>
+                              </select><br/>
+                              <input type="button" value="Valider" ng-click="ModifJouet(jouet.id)"><br/>
+                              <span style="color: green;" ng-if="successParJouet[jouet.id] == true">Modification réussi!!</span>
+                              <ul>
+                                  <li style="color: red;" ng-repeat="error in errorsParJouet[jouet.id]">{{error}}</li>
+                              </ul>
+        </td>
+        <td>
+          Troquer :<br/>
+          Avec qui : <select ng-change="troqueWithChange(jouet.id)" ng-model="troqueWith[jouet.id]">
+                        <option ng-repeat="user in userList" value="{{user.id}}">{{user.prenom}} {{user.nom}}</option>
+                     </select><br/>
+          Quel jouet : <select ng-model="jouetToTroc[jouet.id]">
+                          <option ng-repeat="jouetb in otherJouets" ng-if="jouetb.idUser.toString() === troqueWith[jouet.id]" value="{{jouetb.id}}">{{jouetb.nomj}}</option>
+                       </select>
+          <input type="button" value="Envoyer" ng-click="sendTrocDemmand(jouet.id)">
+          <span style="color: green;" ng-if="successParTroc[jouet.id] == true">Demande envoyée!</span>
+          <ul>
+              <li style="color: red;" ng-repeat="error in errorsParTroc[jouet.id]">{{error}}</li>
+          </ul>
+        </td>
+        <td><input type="button" value="Supprimer" ng-click="supprJouet(jouet.id)"/></td></tr>
       </table>
       <h2>Ajouter un jouet</h2>
       <table>

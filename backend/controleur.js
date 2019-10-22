@@ -12,7 +12,7 @@ module.exports = class Controleur {
 	}
 
 	jouets_list(user_id, callback) {
-		this.modele.select("J.IDJ as id, J.NOMJ as nomj, CA.NOMC as cat, CO.PRENOMCOMPTE as prenom, CO.NOMCOMPTE as nom, J.DESCRIPTION as description, J.STATUT as statut",
+		this.modele.select("J.IDJ as id, CO.IDCOMPTE as idUser, J.NOMJ as nomj, CA.NOMC as cat, CA.IDCAT as catId, CO.PRENOMCOMPTE as prenom, CO.NOMCOMPTE as nom, J.DESCRIPTION as description, J.STATUT as statut",
 						  "JOUETS J, CATEGORIES CA, COMPTES CO",
 		                  "J.IDCOMPTE = CO.IDCOMPTE and J.IDCAT = CA.IDCAT and "+(user_id === null  ? "J.STATUT = 'public'" : "J.IDCOMPTE = "+user_id), function (error, result) {
 				if (error) {
@@ -71,7 +71,7 @@ module.exports = class Controleur {
 											}
 										});
 								}
-							})
+							});
 					}
 				}
 			});
@@ -136,9 +136,142 @@ module.exports = class Controleur {
 								callback(null,true);
 							}
 						});
-					})
+					});
 			});
 		});
 	}
 
+	userList(callback) {
+		this.modele.select("IDCOMPTE as id, PRENOMCOMPTE as prenom, NOMCOMPTE as nom","COMPTES","", function (error,results) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null,results);
+		});
+	}
+
+	modifJouet(idUser,idJouet,nom,description,statut,catId,callback) {
+		this.modele.select("IDJ","JOUETS","IDJ = "+idJouet+" and IDCOMPTE = "+idUser, (error,results) => {
+			if (error) {
+				callback(error);
+				return;
+			}
+			if (results.length === 0) {
+				callback(null,"Jouet non trouuvé ou il ne vous appartient pas");
+				return;
+			}
+			this.modele.update("JOUETS", {NOMJ: nom, DESCRIPTION: description, STATUT: statut, IDCAT: catId},
+				"IDJ = "+idJouet+" and IDCOMPTE = "+idUser, (error) => {
+					if (error) {
+						callback(error);
+						return;
+					}
+					callback(null,true);
+				});
+		});
+	}
+
+	demmandTroc(idUserSrc,idJouetSrc,idUserDst,idJouetDst,callback) {
+		this.modele.select("IDTROC","DEMANDETROC",
+			"IDCOMPTESRC = "+idUserSrc+" and IDJSRC = "+idJouetSrc+" and IDCOMPTEDST = "+idUserDst+" and IDJDST = "+idJouetDst, (error,results) => {
+				if (error) {
+					callback(error);
+					return;
+				}
+				if (results.length > 0) {
+					callback(null,"Cette demande de troc a déjà été envoyée");
+					return;
+				}
+				this.modele.select("IDJ","JOUETS",
+					"(IDJ = "+idJouetSrc+" and IDCOMPTE = "+idUserSrc+") or (IDJ = "+idJouetDst+" and IDCOMPTE = "+idUserDst+")", (error,results) => {
+						if (error) {
+							callback(error);
+							return;
+						}
+						if (results.length < 2) {
+							callback(null,"Les jouets indiqués dans la requête ne correspondent pas aux propriétaires associés");
+							return;
+						}
+						this.modele.insert("DEMANDETROC", [null,idUserSrc,idJouetSrc,idUserDst,idJouetDst], (error) => {
+							if (error) {
+								callback(error);
+								return;
+							}
+							callback(null,true);
+						});
+					});
+			});
+	}
+
+	getDemandTroc(idUser,callback) {
+		this.modele.select("D.IDTROC as id, J.NOMJ as jouetSrc, CO.PRENOMCOMPTE as prenomSrc, CO.NOMCOMPTE as nomSrc",
+							"DEMANDETROC D, COMPTES CO, JOUETS J","D.IDJSRC = J.IDJ and D.IDCOMPTESRC = CO.IDCOMPTE and D.IDCOMPTEDST = "+idUser+" ORDER BY D.IDTROC", (error,results) => {
+				if (error) {
+					callback(error);
+					return;
+				}
+				this.modele.select("J.NOMJ as jouetDst","DEMANDETROC D, JOUETS J","D.IDJDST = J.IDJ and D.IDCOMPTEDST = "+idUser+" ORDER BY D.IDTROC", (error,resultsb) => {
+					if (error) {
+						callback(error);
+						return;
+					}
+					if (results.length !== resultsb.length) {
+						callback(null,"Erreur de cohérence dans la récupération des données");
+						return;
+					}
+					let demandes = [];
+					for (let i=0;i<results.length;i++) {
+						demandes.push({id: results[i].id, jouetSrc: results[i].jouetSrc, prenomSrc: results[i].prenomSrc, nomSrc: results[i].nomSrc, jouetDst: resultsb[i].jouetDst});
+					}
+					callback(null,demandes);
+				});
+			});
+	}
+
+	refusDemandeTroc(idUser,idTroc,callback) {
+		this.modele.delete("DEMANDETROC","IDTROC = "+idTroc+" and IDCOMPTEDST = "+idUser, function (error) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null,true);
+		});
+	}
+
+	acceptDemandeTroc(idUser,idTroc,callback) {
+		this.modele.select("IDCOMPTESRC as idUserSrc, IDJSRC as idJouetSrc, IDCOMPTEDST as idUserDst, IDJDST as idJouetDst","DEMANDETROC",
+							"IDTROC = "+idTroc+" and IDCOMPTEDST = "+idUser, (error,results) => {
+				if (error) {
+					callback(error);
+					return;
+				}
+				if (results.length === 0) {
+					callback(null,"Demande introuvable ou bien elle ne vous est pas destinée");
+					return;
+				}
+
+				let demande = results[0];
+				this.modele.update("JOUETS",{IDCOMPTE: demande.idUserDst},"IDJ = "+demande.idJouetSrc, (error) => {
+					if (error) {
+						callback(error);
+						return;
+					}
+					this.modele.update("JOUETS",{IDCOMPTE: demande.idUserSrc},"IDJ = "+demande.idJouetDst, (error) => {
+						if (error) {
+							callback(error);
+							return;
+						}
+						this.modele.delete("DEMANDETROC",
+							"IDJSRC = "+demande.idJouetSrc+" or IDJSRC = "+demande.idJouetDst+" or IDJDST = "+demande.idJouetSrc+" or IDJDST = "+demande.idJouetDst, (error) => {
+								if (error) {
+									callback(error);
+									return;
+								}
+								callback(null,true);
+							});
+					});
+				});
+			});
+	}
 };

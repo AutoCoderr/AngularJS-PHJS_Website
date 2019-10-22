@@ -43,7 +43,7 @@ angular.module('angularApp')
             $cookies.put("token", data.user.token);
             $cookies.put("connected", true);
             setTimeout(() => {
-              $window.location.href = "/#!/";
+                $window.location.reload();
             },500);
           }
         },
@@ -72,7 +72,7 @@ angular.module('angularApp')
             $cookies.remove("token");
             $cookies.remove("connected");
             setTimeout(() => {
-              $window.location.href = "/#!/";
+              $window.location.reload();
             },500);
           }
         },

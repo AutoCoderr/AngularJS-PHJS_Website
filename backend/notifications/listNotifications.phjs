@@ -1,0 +1,40 @@
+<?phjs
+if (typeof(PHJS.global.connecteds) === "undefined") {
+	PHJS.global.connecteds = {};
+}
+if (typeof(PHJS.global.connecteds) === "undefined") {
+	PHJS.global.connecteds = {};
+}
+
+let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
+if (token === "") {
+	echo_json({rep: "error", errors: ["token non spécifié"]});
+	--END--
+	return;
+}
+
+token = parseInt(token);
+
+if (typeof(PHJS.global.connecteds[token]) === "undefined") {
+	echo_json({rep: "error", errors: ["Vous n'êtes pas connecté"]});
+	--END--
+	return;
+}
+
+let idUser = PHJS.global.connecteds[token].id;
+
+let Controleur = require(PHJS.cd+"/../controleur.js");
+let controleur = new Controleur();
+
+controleur.listNotification(idUser,function (error,notifications) {
+	if (error) {
+		PHJS.log("500", "ERROR", "get list notifications => "+PHJS.libs.util.format(error));
+		echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
+		--END--
+		return;
+	}
+
+	echo_json({rep: "success"});
+	--END--
+});
+?>
