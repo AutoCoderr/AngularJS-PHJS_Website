@@ -4,3 +4,7 @@
 /angular/.tmp
 /angular/bower_components
 /angular/node_modules
+/access.log
+/error.log
+/.idea
+/.gitignore

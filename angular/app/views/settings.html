@@ -1,0 +1,16 @@
+<div ng-controleur="SettingsCtrl">
+  <center>
+    <h1>Parramètres</h1>
+    <br/><br/>
+    <h3 align="left">Changer votre mot de passe :</h3>
+    <br/>
+    Votre mot de passe : <input type="password" ng-model="passwd"/><br/>
+    Confirmez le : <input type="password" ng-model="passwdConfirm"/><br/>
+    <span style="color: red;" ng-bind="verifConfirmPasswd()"></span>
+    <span style="color: green;" ng-if="successChangePasswd == true">Changement de mot de passe réussi!!</span>
+    <ul>
+      <li style="color: red" ng-repeat="error in errorsChangePasswd">{{error}}</li>
+    </ul>
+    <input type="button" value="Valider" ng-click="changePasswd()">
+  </center>
+</div>

@@ -9,6 +9,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -38,7 +39,7 @@
             <span ng-if="Page.connected() == false">Connexion</span>
             <span ng-if="Page.connected() == true">Deconnexion</span></a></li>
           <li ng-if="Page.connected() == false"><a href="/#!/register"><span class="glyphicon glyphicon-user"></span>Inscription</a></li>
-          <li ng-if="Page.connected() == true"><font size='2' color='white'>{{Page.user().prenom}} {{Page.user().nom}}</font></li>
+          <a href="/#!/settings"><li class="fa fa-cog" style="color: white;" ng-if="Page.connected() == true">  {{Page.user().prenom}} {{Page.user().nom}}</li></a>
         </ul>
       </div>
     </div>
@@ -89,6 +90,7 @@
         <script src="scripts/controllers/connect.js"></script>
         <script src="scripts/controllers/register.js"></script>
         <script src="scripts/controllers/notifications.js"></script>
+        <script src="scripts/controllers/settings.js"></script>
         <!-- endbuild -->
 </body>
 </html>

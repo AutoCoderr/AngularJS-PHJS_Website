@@ -63,7 +63,7 @@ module.exports = class Controleur {
 											if (error) {
 												callback(error);
 											} else {
-												if (results.length != 1) {
+												if (results.length !== 1) {
 													callback(null, "Echec de la création du compte");
 												} else {
 													callback(null, {id: results[0].id});
@@ -130,7 +130,7 @@ module.exports = class Controleur {
 							}
 							let idJ = results[0].IDJ;
 							let code = shelljs.exec('mv '+imagePath+" "+__dirname+"/img/"+idJ+".jpg").code;
-							if (code != 0) {
+							if (code !== 0) {
 								callback(new Error("Echec de copie fichier "+imagePath+" => "+__dirname+"/img/"+idJ+".jpg"));
 							} else {
 								callback(null,true);
@@ -298,6 +298,19 @@ module.exports = class Controleur {
 				return;
 			}
 			callback(null);
+		});
+	}
+
+	changePasswd(idUser, passwd, callback) {
+		let sha1 = crypto.createHash("sha1");
+		sha1.update(passwd);
+		let passwdHashed = sha1.digest("hex");
+		this.modele.update("COMPTES", {PASSWORDCOMPTE: passwdHashed}, "IDCOMPTE = "+idUser, function (error) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null,true);
 		});
 	}
 };
