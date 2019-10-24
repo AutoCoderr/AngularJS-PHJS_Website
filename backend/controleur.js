@@ -92,7 +92,7 @@ module.exports = class Controleur {
 		this.modele.select("IDCAT as id, NOMC as nom","CATEGORIES","", function (error,results) {
 			if (error) {
 				callback(error);
-				return
+				return;
 			}
 			callback(null,results);
 		});
@@ -313,4 +313,62 @@ module.exports = class Controleur {
 			callback(null,true);
 		});
 	}
+
+	getMPs(idUser, callback) {
+		this.modele.select("MP.IDMP as id, CO.PRENOMCOMPTE as prenom, CO.NOMCOMPTE as nom, MP.OBJET as object, MP.CONTENT as content, DATEANDTIME as dateTime",
+			  			   "MP, COMPTES CO", "MP.IDCOMPTEDST = "+idUser+" and MP.IDCOMPTESRC = CO.IDCOMPTE", function (error,results) {
+				if (error) {
+					callback(error);
+					return;
+				}
+				callback(null,results);
+			});
+	}
+
+	getMSs(idUser, callback) {
+		this.modele.select("MP.IDMP as id, CO.PRENOMCOMPTE as prenom, CO.NOMCOMPTE as nom, MP.OBJET as object, MP.CONTENT as content, DATEANDTIME as dateTime",
+						   "MP, COMPTES CO", "MP.IDCOMPTESRC = "+idUser+" and MP.IDCOMPTEDST = CO.IDCOMPTE", function (error,results) {
+				if (error) {
+					callback(error);
+					return;
+				}
+				callback(null,results);
+			});
+	}
+
+	sendMp(idUserSrc, idUserDst, object, content, callback) {
+		this.modele.select("IDCOMPTE", "COMPTES", "IDCOMPTE = "+idUserDst, (error,result) => {
+			if (error) {
+				callback(error);
+				return;
+			}
+			if (result.length === 0) {
+				callback(null,"Le destinataire spécifié n'existe pas");
+				return;
+			}
+			//callback(null,"ABCDEF");
+			let date = new Date();
+			this.modele.insert("MP",
+				[null,idUserSrc,idUserDst,
+				date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds(),
+				object,content], (error) => {
+					if (error) {
+						callback(error);
+						return;
+					}
+					callback(null,true);
+				});
+		});
+	}
+
+	supprMP(idUser,idMP,callback) {
+		this.modele.delete("MP","IDMP = "+idMP+" and (IDCOMPTESRC = "+idUser+" or IDCOMPTEDST = "+idUser+")", (error) => {
+			if (error) {
+				callback(error);
+				return;
+			}
+			callback(null);
+		});
+	}
+
 };

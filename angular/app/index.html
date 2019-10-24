@@ -9,7 +9,6 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -34,7 +33,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ng-if="Page.connected() == true"><a href="/#!/notifications">Notifications</a></li>
-          <li ng-if="Page.connected() == true"><a id="MPa" href="/MP.php">Messages privés</a></li>
+          <li ng-if="Page.connected() == true"><a id="MPa" href="/#!/messages">Messages privés</a></li>
           <li><a href="/#!/connect"><span class="glyphicon glyphicon-log-in"></span>
             <span ng-if="Page.connected() == false">Connexion</span>
             <span ng-if="Page.connected() == true">Deconnexion</span></a></li>
@@ -91,6 +90,7 @@
         <script src="scripts/controllers/register.js"></script>
         <script src="scripts/controllers/notifications.js"></script>
         <script src="scripts/controllers/settings.js"></script>
+        <script src="scripts/controllers/messages.js"></script>
         <!-- endbuild -->
 </body>
 </html>

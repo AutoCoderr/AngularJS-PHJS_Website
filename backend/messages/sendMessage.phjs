@@ -1,0 +1,70 @@
+<?phjs
+
+if (typeof(PHJS.global.connecteds) === "undefined") {
+	PHJS.global.connecteds = {};
+}
+
+let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
+if (token === "") {
+	echo_json({rep: "error", errors: ["token non spécifié"]});
+	--END--
+	return;
+}
+
+token = parseInt(token);
+
+if (typeof(PHJS.global.connecteds[token]) === "undefined") {
+	echo_json({rep: "error", errors: ["Vous n'êtes pas connecté"]});
+	--END--
+	return;
+}
+
+let idUserSrc = PHJS.global.connecteds[token].id;
+
+let errors = [];
+
+let idUserDst = typeof(PHJS.args.POST.idUserDst) === "undefined" ? "" : PHJS.args.POST.idUserDst.content;
+if (idUserDst === "") {
+	errors.push("Destinataire non spécifié");
+}
+
+let objet = typeof(PHJS.args.POST.objet) === "undefined" ? "" : PHJS.args.POST.objet.content;
+if (objet === "") {
+	errors.push("Objet non spécifié");
+}
+
+let content = typeof(PHJS.args.POST.content) === "undefined" ? "" : PHJS.args.POST.content.content;
+if (content === "") {
+	errors.push("Contenu du message non spécifié");
+}
+
+if (errors.length > 0)  {
+	echo_json({rep: "error", errors: errors});
+	--END--
+	return;
+}
+
+let Controleur = require(PHJS.cd+"/../controleur.js");
+let controleur = new Controleur();
+
+controleur.sendMp(idUserSrc,idUserDst,objet,content,function (error,result) {
+	if (error) {
+		PHJS.log("500", "ERROR", "send MPS => "+PHJS.libs.util.format(error));
+		echo_json({rep: "error", errors: ["Erreur lors de la récupération des données"]});
+		--END--
+		return;
+	}
+	if (typeof(result) === "string") {
+		echo_json({rep: "error", errors: [result]});
+		--END--
+		return;
+	}
+
+	echo_json({rep: "success"});
+	--END--
+});
+
+/*echo_json({rep: "error", errors: ["NIQUE LA LOGIQUE"]});
+--END--*/
+
+?>

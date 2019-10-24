@@ -10,15 +10,13 @@ module.exports = class Modele {
 			password: password,
 			database: database
 		});
-
-		this.conn.connect();
 	}
 
 	select(columns, tables, conditions = "1 = 1", callback) {
 		if (conditions === "") {
 			conditions = "1 = 1";
 		}
-		this.conn.query('SELECT '+columns+' FROM '+tables+' WHERE '+conditions, function (error, results, fields) {
+		this.conn.query('SELECT '+columns+' FROM '+tables+' WHERE '+conditions, (error, results, fields) => {
 			if (error) {
 				callback(error);
 				return;
@@ -39,7 +37,7 @@ module.exports = class Modele {
 				datasStr += ", ";
 			}
 		}
-		this.conn.query("INSERT INTO "+table+" VALUE ("+datasStr+")", function (error, result) {
+		this.conn.query("INSERT INTO "+table+" VALUE ("+datasStr+")", (error, result) => {
 			if (error) {
 				callback(error,result);
 				return;
@@ -52,8 +50,7 @@ module.exports = class Modele {
 		if (conditions === "") {
 			conditions = "1 = 1";
 		}
-
-		this.conn.query("DELETE FROM "+table+" WHERE "+conditions, function (error, result) {
+		this.conn.query("DELETE FROM "+table+" WHERE "+conditions, (error, result) => {
 			if (error) {
 				callback(error);
 				return;
@@ -77,8 +74,7 @@ module.exports = class Modele {
 			setStr += ", ";
 		}
 		setStr = setStr.substring(0,setStr.length-2);
-
-		this.conn.query("UPDATE "+table+" SET "+setStr+" WHERE "+conditions, function (error, result) {
+		this.conn.query("UPDATE "+table+" SET "+setStr+" WHERE "+conditions, (error, result) => {
 			if (error) {
 				callback(error);
 				return;

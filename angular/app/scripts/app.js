@@ -49,6 +49,11 @@ angular
         controller: 'SettingsCtrl',
         controllerAs: 'settings',
       })
+      .when('/messages', {
+        templateUrl: 'views/messages.html',
+        controller: 'MessagesCtrl',
+        controllerAs: 'messages',
+      })
       .otherwise({
         redirectTo: '/'
       });

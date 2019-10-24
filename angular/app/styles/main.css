@@ -81,3 +81,9 @@ body {
     border-bottom: 0;
   }
 }
+
+.borderTable, .borderTable th, .borderTable td {
+  border: 1px solid black;
+  text-align:center;
+  padding: 5px;
+}
