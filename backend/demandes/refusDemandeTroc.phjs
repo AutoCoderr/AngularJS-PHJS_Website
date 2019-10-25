@@ -1,4 +1,5 @@
 <?phjs
+
 if (typeof(PHJS.global.connecteds) === "undefined") {
 	PHJS.global.connecteds = {};
 }

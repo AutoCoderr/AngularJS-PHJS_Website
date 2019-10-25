@@ -346,7 +346,6 @@ module.exports = class Controleur {
 				callback(null,"Le destinataire spécifié n'existe pas");
 				return;
 			}
-			//callback(null,"ABCDEF");
 			let date = new Date();
 			this.modele.insert("MP",
 				[null,idUserSrc,idUserDst,

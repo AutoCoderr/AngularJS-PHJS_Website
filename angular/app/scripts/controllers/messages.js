@@ -16,7 +16,9 @@ angular.module('angularApp')
       $window.location.href = "/#!/";
     }
 
+    $scope.doMPsDisplay = true;
     $scope.MPs = [];
+    $scope.doMSsDisplay = false;
     $scope.MSs = [];
     $scope.userList = [];
 
@@ -121,6 +123,20 @@ angular.module('angularApp')
 
     $scope.closeOpenedMS = function() {
       $scope.MSToDisplay = null;
+    };
+
+    $scope.changeDisplayMPs = function() {
+      $scope.doMPsDisplay = !$scope.doMPsDisplay;
+      if (!$scope.doMPsDisplay) {
+        $scope.MPToDisplay = null;
+      }
+    };
+
+    $scope.changeDisplayMSs = function() {
+      $scope.doMSsDisplay = !$scope.doMSsDisplay;
+      if (!$scope.doMSsDisplay) {
+        $scope.MSToDisplay = null;
+      }
     };
 
 

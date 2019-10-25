@@ -1,4 +1,5 @@
 <?phjs
+
 let token = typeof(PHJS.args.POST.token) === "undefined" ? "" : PHJS.args.POST.token.content;
 if (token === "") {
     echo_json({rep: "error", errors: ["token non spécifié"]});

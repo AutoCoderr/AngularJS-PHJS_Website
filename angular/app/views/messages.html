@@ -1,13 +1,16 @@
 <div ng-controller="MessagesCtrl">
   <center>
     <h1>Messages privés</h1>
-    <table class="borderTable">
-      <tr><td>Correspondant</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
-      <tr ng-repeat="MP in MPs">
-        <td>{{MP.prenom}} {{MP.nom}}</td><td>{{MP.object}}</td><td>{{MP.dateTime | date:"dd MMM yyyy"}}</td>
-        <td><input ng-click="displayMP(MP.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MP.id)" type="button" value="Supprimer"/></td>
-      </tr>
-    </table>
+    <input type="button" value="{{doMPsDisplay == true ? 'Cacher' : 'Afficher'}}" ng-click="changeDisplayMPs()">
+    <div ng-if="doMPsDisplay == true">
+      <table class="borderTable">
+        <tr><td>Correspondant</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
+        <tr ng-repeat="MP in MPs">
+          <td>{{MP.prenom}} {{MP.nom}}</td><td>{{MP.object}}</td><td>{{MP.dateTime | date:"dd MMM yyyy"}}</td>
+          <td><input ng-click="displayMP(MP.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MP.id)" type="button" value="Supprimer"/></td>
+        </tr>
+      </table>
+    </div>
     <br/>
     <span ng-if="MPToDisplay != null">
       <table class="borderTable">
@@ -18,13 +21,16 @@
       </table>
     </span>
     <h1>Messages envoyés</h1>
-    <table class="borderTable">
-      <tr><td>Destinataire</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
-      <tr ng-repeat="MS in MSs">
-        <td>{{MS.prenom}} {{MS.nom}}</td><td>{{MS.object}}</td><td>{{MS.dateTime | date:"dd MMM yyyy"}}</td>
-        <td><input ng-click="displayMS(MS.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MS.id)" type="button" value="Supprimer"/></td>
-      </tr>
-    </table>
+    <input type="button" value="{{doMSsDisplay == true ? 'Cacher' : 'Afficher'}}" ng-click="changeDisplayMSs()">
+    <div ng-if="doMSsDisplay == true">
+      <table class="borderTable">
+        <tr><td>Destinataire</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
+        <tr ng-repeat="MS in MSs">
+          <td>{{MS.prenom}} {{MS.nom}}</td><td>{{MS.object}}</td><td>{{MS.dateTime | date:"dd MMM yyyy"}}</td>
+          <td><input ng-click="displayMS(MS.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MS.id)" type="button" value="Supprimer"/></td>
+        </tr>
+      </table>
+    </div>
     <br/>
     <span ng-if="MSToDisplay != null">
       <table class="borderTable">
