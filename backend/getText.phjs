@@ -1,0 +1,28 @@
+<?phjs
+
+let key = typeof(PHJS.args.GET.key) === "undefined" ? "" : PHJS.args.GET.key;
+if (key === "") {
+	echo("Key undefined");
+	--END--
+}
+
+let language = typeof(PHJS.args.GET.language) === "undefined" ? "" : PHJS.args.GET.language;
+if (language === "") {
+	echo("Language undefined");
+	--END--
+}
+
+let Controleur = require(PHJS.cd+"/controleur.js");
+let controleur = new Controleur();
+controleur.getText(key,language, function (error,text) {
+	if (error) {
+		PHJS.log("500", "ERROR", "get text => "+PHJS.libs.util.format(error));
+		echo("Error in database");
+		--END--
+		return;
+	}
+	echo(text);
+	--END--
+});
+
+?>

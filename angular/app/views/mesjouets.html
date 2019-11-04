@@ -1,68 +1,68 @@
 <div ng-controleur="MesJouetsCtrl">
-  <h1>Vos jouets</h1>
+  <h1>{{Page.getText('yourtoys')}}</h1>
   <ul>
-     <span ng-if="jouets.length == 0" style="color: orange;">Vous n'avez aucun jouet</span>
+     <span ng-if="jouets.length == 0" style="color: orange;">{{Page.getText('havenothingtoys')}}</span>
 
      <table>
         <tr ng-repeat="jouet in jouets"><td>
             <table class="list">
                 <tr><td style="font-size: 30px;">{{jouet.nomj}} ({{jouet.cat}}) : </td></tr>
-                <tr><td style="font-size: 20px;">à {{jouet.prenom}} {{jouet.nom}}</td></tr>
+                <tr><td style="font-size: 20px;">{{Page.getText('to')}} {{jouet.prenom}} {{jouet.nom}}</td></tr>
                 <tr><td><img width="400px" height="300px" src="http://54.38.184.22:9001/img/{{jouet.id}}.jpg" /></td></tr>
-                <tr><td>statut : '{{jouet.statut == 'prive' ? 'Privé' : 'Publique'}}'</td></tr>
+                <tr><td>statut : '{{jouet.statut == 'prive' ? Page.getText('private') : Page.getText('public')}}'</td></tr>
                 <tr><td style="height: 35px;"></td></tr>
              </table>
          </td><td>
-             Changer nom : <input type="text" ng-model="nomsToChange[jouet.id]"><br/><br/>
-             Changer description : <input type="text" ng-model="descriptionsToChange[jouet.id]"><br/><br/>
-             Changer Categorie : <select ng-model="categoriesToChange[jouet.id]">
+             {{Page.getText('changename_form')}} <input type="text" ng-model="nomsToChange[jouet.id]"><br/><br/>
+             {{Page.getText('changedesc_form')}} <input type="text" ng-model="descriptionsToChange[jouet.id]"><br/><br/>
+             {{Page.getText('changecategorie_form')}} <select ng-model="categoriesToChange[jouet.id]">
                                        <option ng-repeat="cat in cats" value="{{cat.id}}">{{cat.nom}}</option>
                                  </select><br/><br/>
-             Changer statut : <select ng-model="statutsToChange[jouet.id]">
-                                   <option value="prive">Privé</option>
-                                   <option value="public">Publique</option>
+             {{Page.getText('changestatut_form')}} <select ng-model="statutsToChange[jouet.id]">
+                                   <option value="prive">{{Page.getText('private')}}</option>
+                                   <option value="public">{{Page.getText('public')}}</option>
                               </select><br/>
-                              <input type="button" value="Valider" ng-click="ModifJouet(jouet.id)"><br/>
-                              <span style="color: green;" ng-if="successParJouet[jouet.id] == true">Modification réussi!!</span>
+                              <input type="button" value="{{Page.getText('valid')}}" ng-click="ModifJouet(jouet.id)"><br/>
+                              <span style="color: green;" ng-if="successParJouet[jouet.id] == true">{{Page.getText('changesuccedded')}}</span>
                               <ul>
                                   <li style="color: red;" ng-repeat="error in errorsParJouet[jouet.id]">{{error}}</li>
                               </ul>
         </td>
         <td>
-          Troquer :<br/>
-          Avec qui : <select ng-change="troqueWithChange(jouet.id)" ng-model="troqueWith[jouet.id]">
-                        <option ng-repeat="user in userList" value="{{user.id}}">{{user.prenom}} {{user.nom}}</option>
-                     </select><br/>
-          Quel jouet : <select ng-model="jouetToTroc[jouet.id]">
+          {{Page.getText('troc')}} <br/>
+          {{Page.getText('withwhom')}} <select ng-change="troqueWithChange(jouet.id)" ng-model="troqueWith[jouet.id]">
+                                            <option ng-repeat="user in userList" value="{{user.id}}">{{user.prenom}} {{user.nom}}</option>
+                                       </select><br/>
+          {{Page.getText('whatatoy')}} <select ng-model="jouetToTroc[jouet.id]">
                           <option ng-repeat="jouetb in otherJouets" ng-if="jouetb.idUser.toString() === troqueWith[jouet.id]" value="{{jouetb.id}}">{{jouetb.nomj}}</option>
                        </select>
-          <input type="button" value="Envoyer" ng-click="sendTrocDemmand(jouet.id)">
+          <input type="button" value="{{Page.getText('send')}}" ng-click="sendTrocDemmand(jouet.id)">
           <span style="color: green;" ng-if="successParTroc[jouet.id] == true">Demande envoyée!</span>
           <ul>
               <li style="color: red;" ng-repeat="error in errorsParTroc[jouet.id]">{{error}}</li>
           </ul>
         </td>
-        <td><input type="button" value="Supprimer" ng-click="supprJouet(jouet.id)"/></td></tr>
+        <td><input type="button" value="{{Page.getText('delete')}}" ng-click="supprJouet(jouet.id)"/></td></tr>
       </table>
-      <h2>Ajouter un jouet</h2>
+      <h2>{{Page.getText('addatoy')}}</h2>
       <table>
-          <tr><td>Nom : </td><td><input type="text" ng-model="nomJ"/></td></tr>
-          <tr><td>Description : </td><td><input type="text" ng-model="descriptionJ"/></td></tr>
-          <tr><td>Status : </td><td>
+          <tr><td>{{Page.getText('name_form')}} </td><td><input type="text" ng-model="nomJ"/></td></tr>
+          <tr><td>{{Page.getText('desc_form')}} </td><td><input type="text" ng-model="descriptionJ"/></td></tr>
+          <tr><td>{{Page.getText('status_form')}} </td><td>
             <select ng-model="statutJ">
-                <option value="prive">Privé</option>
-                <option value="public">Publique</option>
+                <option value="prive">{{Page.getText('private')}}</option>
+                <option value="public">{{Page.getText('public')}}</option>
             </select>
            </td></tr>
-          <tr><td>Catégorie</td><td>
+          <tr><td>{{Page.getText('categorie_form')}} </td><td>
             <select ng-model="catJ">
                 <option ng-repeat="cat in cats" value="{{cat.id}}">{{cat.nom}}</option>
             </select>
           </td></tr>
-          <tr><td>Image : </td><td><input type="file" id="fileUpload"/></td></tr>
+          <tr><td>{{Page.getText('picture_form')}} </td><td><input type="file" id="fileUpload"/></td></tr>
       </table>
-      <input type="button" value="Ajouter" ng-click="addJouet()"/><br/>
-      <span style="color: green" ng-if="success == true">Upload Réussi!</span>
+      <input type="button" value="{{Page.getText('add')}}" ng-click="addJouet()"/><br/>
+      <span style="color: green" ng-if="success == true">{{Page.getText('uploadsuccedded')}}</span>
       <ul>
             <li style="color: red;" ng-repeat="error in errors">{{error}}</li>
       </ul>

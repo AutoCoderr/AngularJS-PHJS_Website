@@ -275,7 +275,7 @@ module.exports = class Controleur {
 									}
 									callback(null,true);
 								});
-							});
+						});
 					});
 				});
 			});
@@ -367,6 +367,20 @@ module.exports = class Controleur {
 				return;
 			}
 			callback(null);
+		});
+	}
+
+	getText(key,language,callback) {
+		this.modele.select("TEXTCONTENT as text","TEXT","LANGUAGE = '"+language+"' and TEXTKEY = '"+key+"'", function (error,results) {
+			if (error) {
+				callback(error);
+				return;
+			}
+			if (results.length === 0) {
+				callback(null,key);
+				return;
+			}
+			callback(null,results[0].text);
 		});
 	}
 

@@ -26,13 +26,13 @@ angular.module('angularApp')
 
         $scope.verifConfirmPasswd = function () {
           if ($scope.passwd !== $scope.passwdConfirm & $scope.passwdConfirm !== "") {
-              return "Les mot de passe ne correpondent pas";
+              return Page.getText('passwordDontConrresponding');
           }
         };
 
         $scope.sendRegister = function () {
             if ($scope.passwd === "" | $scope.passwd !== $scope.passwdConfirm ) {
-                $scope.errors = ["les mot de passe ne correpondent pas"];
+                $scope.errors = [Page.getText('passwordDontConrresponding')];
                 $scope.$apply();
             }
             $.post(

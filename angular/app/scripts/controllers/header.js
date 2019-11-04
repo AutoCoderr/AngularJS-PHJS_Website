@@ -10,7 +10,7 @@
 angular.module('angularApp')
   .controller('HeaderCtrl', function ($scope, $cookies, $route, Page) {
       $scope.Page = Page;
-  }).factory('Page', function ($cookies, $route) {
+  }).factory('Page', function ($cookies, $window, $http, $q, $route) {
       let connected = $cookies.get("connected") === undefined ? false : true;
       let user = {};
       if ($cookies.get("connected") !== undefined) {
@@ -18,9 +18,21 @@ angular.module('angularApp')
           user.nom = $cookies.get("nom");
       }
       let title = 'Site de troc';
+      let lang = $window.navigator.language || $window.navigator.userLanguage;
+      let texts = {};
       return {
         title: function() { return title; },
         setTitle: function(newTitle) { title = newTitle; },
+        getText: function (key) {
+          if (typeof(texts[key]) !== "undefined") {
+            return texts[key];
+          }
+          texts[key] = "loading text";
+          return $http.get("http://54.38.184.22:9001/getText.phjs?key="+key+"&language="+lang).then((response) => {
+            texts[key] = response.data;
+          });
+          return "loading text";
+        },
         connected: function () { return connected; },
         setConnected: function (newConnected) { connected = newConnected; },
         user: function () { return user; },
@@ -38,7 +50,7 @@ angular.module('angularApp')
                     },
 
                     (data) => {
-                        if (data.rep == "error") {
+                        if (data.rep === "error") {
                             console.log("Errors in verifConnect : ");
                             for (let i = 0; i < data.errors.length; i++) {
                                 console.log(" - " + data.errors[i]);

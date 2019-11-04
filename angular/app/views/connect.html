@@ -1,17 +1,17 @@
 <div ng-controleur="ConnectCtrl">
   <center>
     <section ng-if="Page.connected() == false">
-        <h1>----- Connection -----</h1>
-        Votre prénom: <input type="text" ng-model="$parent.prenom"/><br/>
-        Votre nom: <input type="text" ng-model="$parent.nom"/><br/>
-        Votre mot de passe: <input type="password" ng-model="$parent.passwd"/><br/>
-        <input type="button" value="Valider" ng-click="sendConnect()"/>
-        <span style="color: green" ng-if="success === true">Connexion réussie !! </span>
+        <h1>----- {{Page.getText('connection')}} -----</h1>
+        {{Page.getText('firstname_form')}} <input type="text" ng-model="$parent.prenom"/><br/>
+        {{Page.getText('lastname_form')}} <input type="text" ng-model="$parent.nom"/><br/>
+        {{Page.getText('password_form')}} <input type="password" ng-model="$parent.passwd"/><br/>
+        <input type="button" value="{{Page.getText('valid')}}" ng-click="sendConnect()"/>
+        <span style="color: green" ng-if="success === true">{{Page.getText('connection_success')}}</span>
     </section>
     <section ng-if="Page.connected() == true">
-      <h1>----- De-connection -----</h1>
-      <input type="button" ng-click="sendDisconnect()" value="Se deconnecter"/>
-      <span style="color: green" ng-if="success === true">Deconnexion réussie !! </span>
+      <h1>----- {{Page.getText('disconnect')}} -----</h1>
+      <input type="button" ng-click="sendDisconnect()" value="{{Page.getText('to_disconnect')}}"/>
+      <span style="color: green" ng-if="success === true">{{Page.getText('disconnection_success')}}</span>
     </section>
     <ul>
       <li ng-repeat="error in errors" style="color: red;">{{error}}</li>

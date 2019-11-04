@@ -1,58 +1,58 @@
 <div ng-controller="MessagesCtrl">
   <center>
-    <h1>Messages privés</h1>
+    <h1>{{Page.getText('MPs')}}</h1>
     <input type="button" value="{{doMPsDisplay == true ? 'Cacher' : 'Afficher'}}" ng-click="changeDisplayMPs()">
     <div ng-if="doMPsDisplay == true">
       <table class="borderTable">
-        <tr><td>Correspondant</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
+        <tr><td>{{Page.getText('corresponding')}}</td><td>{{Page.getText('object')}}</td><td>{{Page.getText('dateAndTime')}}</td><td></td><td></td></tr>
         <tr ng-repeat="MP in MPs">
           <td>{{MP.prenom}} {{MP.nom}}</td><td>{{MP.object}}</td><td>{{MP.dateTime | date:"dd MMM yyyy"}}</td>
-          <td><input ng-click="displayMP(MP.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MP.id)" type="button" value="Supprimer"/></td>
+          <td><input ng-click="displayMP(MP.index)" type="button" value="{{Page.getText('open')}}"/></td><td><input ng-click="supprMP(MP.id)" type="button" value="Supprimer"/></td>
         </tr>
       </table>
     </div>
     <br/>
     <span ng-if="MPToDisplay != null">
       <table class="borderTable">
-        <tr><td>De : </td><td>{{MPToDisplay.prenom}} {{MPToDisplay.nom}}</td></tr>
-        <tr><td>Objet : </td><td>{{MPToDisplay.object}}</td></tr>
-        <tr><td>Contenu : </td><td>{{MPToDisplay.content}}</td></tr>
-        <tr><td colspan="2"><input type="button" value="Fermer" ng-click="closeOpenedMP()"/></td></tr>
+        <tr><td>{{Page.getText('fromMessage')}} </td><td>{{MPToDisplay.prenom}} {{MPToDisplay.nom}}</td></tr>
+        <tr><td>{{Page.getText('objectMessage')}} </td><td>{{MPToDisplay.object}}</td></tr>
+        <tr><td>{{Page.getText('contentMessage')}} </td><td>{{MPToDisplay.content}}</td></tr>
+        <tr><td colspan="2"><input type="button" value="{{Page.getText('close')}}" ng-click="closeOpenedMP()"/></td></tr>
       </table>
     </span>
     <h1>Messages envoyés</h1>
     <input type="button" value="{{doMSsDisplay == true ? 'Cacher' : 'Afficher'}}" ng-click="changeDisplayMSs()">
     <div ng-if="doMSsDisplay == true">
       <table class="borderTable">
-        <tr><td>Destinataire</td><td>Objet</td><td>Date et heure</td><td></td><td></td></tr>
+        <tr><td>{{Page.getText('recipient')}}</td><td>{{Page.getText('object')}}</td><td>{{Page.getText('dateAndTime')}}</td><td></td><td></td></tr>
         <tr ng-repeat="MS in MSs">
           <td>{{MS.prenom}} {{MS.nom}}</td><td>{{MS.object}}</td><td>{{MS.dateTime | date:"dd MMM yyyy"}}</td>
-          <td><input ng-click="displayMS(MS.index)" type="button" value="Voir"/></td><td><input ng-click="supprMP(MS.id)" type="button" value="Supprimer"/></td>
+          <td><input ng-click="displayMS(MS.index)" type="button" value="{{Page.getText('open')}}"/></td><td><input ng-click="supprMP(MS.id)" type="button" value="Supprimer"/></td>
         </tr>
       </table>
     </div>
     <br/>
     <span ng-if="MSToDisplay != null">
       <table class="borderTable">
-        <tr><td>De : </td><td>{{MSToDisplay.prenom}} {{MSToDisplay.nom}}</td></tr>
-        <tr><td>Objet : </td><td>{{MSToDisplay.object}}</td></tr>
-        <tr><td>Contenu : </td><td>{{MSToDisplay.content}}</td></tr>
-        <tr><td colspan="2"><input type="button" value="Fermer" ng-click="closeOpenedMS()"/></td></tr>
+        <tr><td>{{Page.getText('fromMessage')}} </td><td>{{MSToDisplay.prenom}} {{MSToDisplay.nom}}</td></tr>
+        <tr><td>{{Page.getText('objectMessage')}} </td><td>{{MSToDisplay.object}}</td></tr>
+        <tr><td>{{Page.getText('contentMessage')}} </td><td>{{MSToDisplay.content}}</td></tr>
+        <tr><td colspan="2"><input type="button" value="{{Page.getText('close')}}" ng-click="closeOpenedMS()"/></td></tr>
       </table>
     </span>
-    <h3 align="left">Envoyer un message :</h3>
+    <h3 align="left">{{Page.getText('sendMessage_form')}}</h3>
     <table>
       <tr>
-        <td>Destinataire : </td>
+        <td>{{Page.getText('recipient')}} : </td>
         <td><select ng-model="choosedUser">
             <option ng-repeat="user in userList" value="{{user.id}}">{{user.prenom}} {{user.nom}}</option>
         </select></td>
       </tr>
       <tr>
-        <td>Object</td><td><input type="text" ng-model="objet"></td>
+        <td>{{Page.getText('objectMessage')}}</td><td><input type="text" ng-model="objet"></td>
       </tr>
       <tr>
-        <td>Contenu:</td><td><textarea ng-model="content"></textarea></td>
+        <td>{{Page.getText('contentMessage')}}</td><td><textarea ng-model="content"></textarea></td>
       </tr>
       <tr>
         <td colspan="2"><center><input type="button" value="Envoyer" ng-click="sendMP()"/></center></td>

@@ -10,6 +10,8 @@ module.exports = class Modele {
 			password: password,
 			database: database
 		});
+		this.conn.connect();
+		this.ended = false;
 	}
 
 	select(columns, tables, conditions = "1 = 1", callback) {
@@ -22,6 +24,10 @@ module.exports = class Modele {
 				return;
 			}
 			callback(null, results);
+			if (!this.ended) {
+				this.conn.end();
+				this.ended = true;
+			}
 		});
 	}
 
@@ -43,6 +49,10 @@ module.exports = class Modele {
 				return;
 			}
 			callback(null,result);
+			if (!this.ended) {
+				this.conn.end();
+				this.ended = true;
+			}
 		});
 	}
 
@@ -56,6 +66,10 @@ module.exports = class Modele {
 				return;
 			}
 			callback(null);
+			if (!this.ended) {
+				this.conn.end();
+				this.ended = true;
+			}
 		});
 	}
 
@@ -80,6 +94,10 @@ module.exports = class Modele {
 				return;
 			}
 			callback(null);
+			if (!this.ended) {
+				this.conn.end();
+				this.ended = true;
+			}
 		});
 	}
 

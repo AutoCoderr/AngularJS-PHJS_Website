@@ -1,27 +1,27 @@
 <div ng-controleur="NotificationCtrl">
   <center>
-    <h1>Demande et Notifications</h1>
+    <h1>{{Page.getText('demmandAndNotification')}}</h1>
     <span ng-if="errorsDemand.length > 0">
-      Erreurs récupérations des demandes
+      Error in getting the demmands
       <ul>
         <li style="color: red;" ng-repeat="error in errorsDemand">{{error}}</li>
       </ul>
     </span>
     <span ng-if="errorsNotifications.length > 0">
-      Erreurs récupérations des notifications
+      Error in getting the notifications
       <ul>
         <li style="color: red;" ng-repeat="error in errorsNotifications">{{error}}</li>
       </ul>
     </span>
 
-    <span style="color: orange;" ng-if="demandes.length == 0">Vous n'avez aucune demande</span>
+    <span style="color: orange;" ng-if="demandes.length == 0">{{Page.getText('nothingDemand')}}</span>
     <table>
       <tr ng-repeat="demande in demandes">
-        <td><b>{{demande.prenomSrc}} {{demande.nomSrc}}</b> Souhaite échanger son <b>{{demande.jouetSrc}}</b> avec votre <b>{{demande.jouetDst}} : </b></td>
+        <td><b>{{demande.prenomSrc}} {{demande.nomSrc}}</b> {{Page.getText('wantToTroc')}} <b>{{demande.jouetSrc}}</b> {{Page.getText('withYour')}} <b>{{demande.jouetDst}} : </b></td>
         <td><input type="button" value="Accepter" ng-click="acceptDemande(demande.id)"/><input type="button" value="Refuser" ng-click="refusDemande(demande.id)"/></td>
       </tr>
     </table>
-    <span style="color: orange;" ng-if="notifications.length == 0">Vous n'avez aucune notification</span>
+    <span style="color: orange;" ng-if="notifications.length == 0">{{Page.getText('nothingNotification')}}</span>
     <table>
       <tr ng-repeat="notification in notifications">
         <td>{{notification.content}}</td>

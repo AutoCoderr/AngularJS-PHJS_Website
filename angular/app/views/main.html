@@ -5,7 +5,7 @@
     }
   </style>
   <center>
-    <h1>Liste des jouets</h1>
+    <h1>{{Page.getText('listoftoys')}}</h1>
     <br/>
     <br/>
     <div ng-if="errors.length > 0">
@@ -18,7 +18,7 @@
         <tr ng-repeat="jouet in jouets"><td>
           <table class="list">
             <tr><td style="font-size: 30px;">{{jouet.nomj}} ({{jouet.cat}}) : </td></tr>
-            <tr><td style="font-size: 20px;">à {{jouet.prenom}} {{jouet.nom}}</td></tr>
+            <tr><td style="font-size: 20px;">{{Page.getText('to')}} {{jouet.prenom}} {{jouet.nom}}</td></tr>
             <tr><td><img width="400px" height="300px" src="http://54.38.184.22:9001/img/{{jouet.id}}.jpg" /></td></tr>
           </table>
         </td></tr>
